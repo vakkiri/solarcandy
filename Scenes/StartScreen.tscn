@@ -1,0 +1,247 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://Scenes/StartScreen.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Images/guy2.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Images/title.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Images/gameover-press-start.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Audio/intro.wav" type="AudioStream" id=5]
+[ext_resource path="res://Assets/Images/halo.png" type="Texture" id=6]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform float time;
+
+void fragment() {
+	float offset = time * 0.02;
+	float w = (100.0);
+	COLOR.r = 0.75 * (sin((UV.x + cos((UV.y + time * 0.025) * 2.0) + offset) * w));
+	COLOR.r += 0.5 * (cos((UV.x + sin((UV.y + time * 0.02) * 8.0) + (time * 0.01)) * w));
+	COLOR.b = 0.25 + (0.1 * sin(time));
+	COLOR.g = 0.0;
+	COLOR *= 0.5;
+	COLOR.a = 1.0;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/time = null
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 6 )
+region = Rect2( 152, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 6 )
+region = Rect2( 304, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 6 )
+region = Rect2( 456, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 6 )
+region = Rect2( 608, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 6 )
+region = Rect2( 760, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 6 )
+region = Rect2( 912, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 6 )
+region = Rect2( 1064, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 6 )
+region = Rect2( 1216, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 6 )
+region = Rect2( 1368, 0, 152, 61 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[sub_resource type="Shader" id=17]
+code = "shader_type canvas_item;
+uniform float screen_width;
+uniform float screen_height;
+
+void fragment() {
+    COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	float x = 1.0/screen_width;
+	float y = UV.y * (screen_height * 4.0) + sin(UV.x * screen_width * 0.25) * 4.0;
+	vec4 right = textureLod(SCREEN_TEXTURE, SCREEN_UV + vec2(x, 0.0), 0.0);
+	vec4 left = textureLod(SCREEN_TEXTURE, SCREEN_UV - vec2(x, 0.0), 0.0);
+	if (int(y) % 2 == 0) {
+		COLOR *= 0.95;
+		COLOR.r *= 0.9;
+	}
+	COLOR.a = 1.0;
+	if (left.r > 0.8)
+		COLOR.r = (COLOR.r + 0.1) * 1.25;
+	if (right.b > 0.8)
+		COLOR.b = (COLOR.b + 0.1) * 1.25;
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 17 )
+shader_param/screen_width = null
+shader_param/screen_height = null
+
+[node name="Start" type="Node2D"]
+position = Vector2( 152, 216 )
+script = ExtResource( 1 )
+
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource( 2 )
+margin_left = -152.0
+margin_top = -216.0
+margin_right = 702.0
+margin_bottom = 264.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -120.0
+margin_top = -216.0
+margin_right = 456.0
+margin_bottom = 264.0
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 392, -40 )
+frames = SubResource( 13 )
+frame = 8
+playing = true
+offset = Vector2( -128, -48 )
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+margin_left = -120.0
+margin_top = -216.0
+margin_right = 520.0
+margin_bottom = 264.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PressStart" type="Node2D" parent="."]
+
+[node name="TextureRect3" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = 264.0
+margin_right = 40.0
+margin_bottom = 304.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect4" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = 200.0
+margin_right = 40.0
+margin_bottom = 240.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect5" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = 136.0
+margin_right = 40.0
+margin_bottom = 176.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect6" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = 72.0
+margin_right = 40.0
+margin_bottom = 112.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect7" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 48.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect8" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = -56.0
+margin_right = 40.0
+margin_bottom = -16.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect9" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = -120.0
+margin_right = 40.0
+margin_bottom = -80.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect10" type="TextureRect" parent="PressStart"]
+margin_left = -8.0
+margin_top = -184.0
+margin_right = 40.0
+margin_bottom = -144.0
+rect_rotation = 270.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Glow" type="ColorRect" parent="."]
+material = SubResource( 18 )
+margin_left = -152.0
+margin_top = -216.0
+margin_right = 488.0
+margin_bottom = 264.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+autoplay = true

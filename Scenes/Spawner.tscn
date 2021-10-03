@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Images/indicator.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Spawner.gd" type="Script" id=2]
+
+[node name="Spawner" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Third" type="ColorRect" parent="."]
+margin_left = 3.0
+margin_top = 6.0
+margin_right = 7.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Second" type="ColorRect" parent="."]
+margin_left = 3.0
+margin_top = 21.0
+margin_right = 7.0
+margin_bottom = 25.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="First" type="ColorRect" parent="."]
+margin_left = 3.0
+margin_top = 38.0
+margin_right = 7.0
+margin_bottom = 42.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 48.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

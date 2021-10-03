@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Images/border.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Board.gd" type="Script" id=2]
+
+[node name="Board" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -104.0
+margin_top = -104.0
+margin_right = 104.0
+margin_bottom = 104.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopSpawnPoint" type="Node2D" parent="."]
+position = Vector2( -8, -104 )
+rotation = -0.560419
+
+[node name="BottomSpawnPoint" type="Node2D" parent="."]
+position = Vector2( 8, 104 )
+
+[node name="LeftSpawnPoint" type="Node2D" parent="."]
+position = Vector2( -104, 8 )
+
+[node name="RightSpawnPoint" type="Node2D" parent="."]
+position = Vector2( 104, -8 )

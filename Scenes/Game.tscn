@@ -1,0 +1,214 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://Scenes/Board.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Score.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Assets/Images/guy.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/Game.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Images/halo.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Audio/unstable.wav" type="AudioStream" id=6]
+[ext_resource path="res://Assets/Images/heart.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/Spawner.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/GameOver.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform float time;
+
+void fragment() {
+	float offset = time * 0.02;
+	float w = (100.0);
+	COLOR.r = 0.75 * (sin((UV.x + cos((UV.y + time * 0.025) * 2.0) + offset) * w));
+	COLOR.r += 0.5 * (cos((UV.x + sin((UV.y + time * 0.02) * 8.0) + (time * 0.01)) * w));
+	COLOR.b = 0.25 + (0.1 * sin(time));
+	COLOR.g = 0.0;
+	COLOR *= 0.5;
+	COLOR.a = 1.0;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/time = null
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 5 )
+region = Rect2( 152, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 5 )
+region = Rect2( 304, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 5 )
+region = Rect2( 456, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 5 )
+region = Rect2( 608, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 5 )
+region = Rect2( 760, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 5 )
+region = Rect2( 912, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 5 )
+region = Rect2( 1064, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 5 )
+region = Rect2( 1216, 0, 152, 61 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 5 )
+region = Rect2( 1368, 0, 152, 61 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=16]
+animations = [ {
+"frames": [ SubResource( 14 ) ],
+"loop": true,
+"name": "empty",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ) ],
+"loop": true,
+"name": "full",
+"speed": 5.0
+} ]
+
+[sub_resource type="Shader" id=17]
+code = "shader_type canvas_item;
+uniform float screen_width;
+uniform float screen_height;
+
+void fragment() {
+    COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	float x = 1.0/screen_width;
+	float y = UV.y * (screen_height * 4.0) + sin(UV.x * screen_width * 0.25) * 4.0;
+	vec4 right = textureLod(SCREEN_TEXTURE, SCREEN_UV + vec2(x, 0.0), 0.0);
+	vec4 left = textureLod(SCREEN_TEXTURE, SCREEN_UV - vec2(x, 0.0), 0.0);
+	if (int(y) % 2 == 0) {
+		COLOR *= 0.95;
+		COLOR.r *= 0.9;
+	}
+	COLOR.a = 1.0;
+	if (left.r > 0.8)
+		COLOR.r = (COLOR.r + 0.1) * 1.25;
+	if (right.b > 0.8)
+		COLOR.b = (COLOR.b + 0.1) * 1.25;
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 17 )
+shader_param/screen_width = null
+shader_param/screen_height = null
+
+[node name="Game" type="Node2D"]
+position = Vector2( 152, 216 )
+script = ExtResource( 4 )
+
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource( 2 )
+margin_left = -152.0
+margin_top = -216.0
+margin_right = 702.0
+margin_bottom = 264.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Board" parent="." instance=ExtResource( 1 )]
+position = Vector2( 16, -16 )
+
+[node name="Score" parent="." instance=ExtResource( 2 )]
+position = Vector2( 16, -184 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -120.0
+margin_top = -216.0
+margin_right = 456.0
+margin_bottom = 264.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 392, -40 )
+frames = SubResource( 13 )
+frame = 9
+playing = true
+offset = Vector2( -128, -48 )
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+autoplay = true
+
+[node name="Heart1" type="AnimatedSprite" parent="."]
+position = Vector2( -64, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Heart2" type="AnimatedSprite" parent="."]
+position = Vector2( -32, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Heart3" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Heart4" type="AnimatedSprite" parent="."]
+position = Vector2( 32, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Heart5" type="AnimatedSprite" parent="."]
+position = Vector2( 64, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Heart6" type="AnimatedSprite" parent="."]
+position = Vector2( 96, -144 )
+frames = SubResource( 16 )
+animation = "full"
+
+[node name="Spawner" parent="." instance=ExtResource( 8 )]
+position = Vector2( -104, -104 )
+
+[node name="Glow" type="ColorRect" parent="."]
+material = SubResource( 18 )
+margin_left = -152.0
+margin_top = -216.0
+margin_right = 488.0
+margin_bottom = 264.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameOver" parent="." instance=ExtResource( 9 )]
+visible = false
+position = Vector2( -152, 0 )
