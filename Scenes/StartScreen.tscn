@@ -74,7 +74,7 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[sub_resource type="Shader" id=17]
+[sub_resource type="Shader" id=14]
 code = "shader_type canvas_item;
 uniform float screen_width;
 uniform float screen_height;
@@ -96,8 +96,8 @@ void fragment() {
 		COLOR.b = (COLOR.b + 0.1) * 1.25;
 }"
 
-[sub_resource type="ShaderMaterial" id=18]
-shader = SubResource( 17 )
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 14 )
 shader_param/screen_width = null
 shader_param/screen_height = null
 
@@ -128,7 +128,7 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 392, -40 )
 frames = SubResource( 13 )
-frame = 8
+frame = 5
 playing = true
 offset = Vector2( -128, -48 )
 
@@ -233,7 +233,7 @@ __meta__ = {
 }
 
 [node name="Glow" type="ColorRect" parent="."]
-material = SubResource( 18 )
+material = SubResource( 15 )
 margin_left = -152.0
 margin_top = -216.0
 margin_right = 488.0

@@ -16,7 +16,7 @@ const MAX_CELL = 12
 const MIDDLE = 6
 const GRID_SIZE = 11
 const CELL_SIZE = 16
-const WEIGHT_CUTOFF = 5
+const WEIGHT_CUTOFF = 6
 var state = State.SPAWN
 var poppers = []
 var lives = 6
@@ -30,6 +30,9 @@ var pop_time = 0.5
 var post_freeze_state = null
 var score = 0
 var round_score = 0
+var move_time = 0.5
+var move_time_accel = 0.25 / 80.0
+var min_move_time = 0.15
 
 func hurt(change_state=true):
 	lives -= 1
@@ -164,7 +167,7 @@ func check_pops():
 				var n = get_neighbours(Vector2(row, col), c, memo)
 				for cell in n:
 					memo[cell.x][cell.y] = true
-					if len(n) >= 3:
+					if len(n) >= 4:
 						cells_to_pop.append(cell)
 	
 	for cell in cells_to_pop:
@@ -332,6 +335,10 @@ func drain():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time += delta
+	if move_time > min_move_time:
+		move_time -= move_time_accel * delta
+	else:
+		move_time = min_move_time
 	$Background.get_material().set_shader_param("time", time)
 	if not dead:
 		if state == State.DRAIN:

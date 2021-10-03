@@ -9,8 +9,6 @@ var stuck = false
 var vertical_step = Vector2(0, 0.5)
 var horizontal_step = Vector2(1, 0)
 var cell = 0
-var move_time_accel = 0.25 / 60
-var min_move_time = 0.1
 
 enum Colour {
 	BLOCK, # BLOCK type is a dummy to represent the on-board blocks 
@@ -35,6 +33,7 @@ func _ready():
 	if is_block():
 		visible = false
 		stuck = true
+	move_time = get_parent().get_parent().move_time
 
 func init():
 	var rand = get_parent().get_parent().get_node("Spawner").get_next()
@@ -181,10 +180,7 @@ func round_position():
 func _process(delta):
 	var ystep = vertical_step.rotated(deg2rad(-get_parent().get_rotation()))
 	var xstep = horizontal_step.rotated(deg2rad(-get_parent().get_rotation()))
-	if move_time > min_move_time:
-		move_time -= move_time_accel * delta
-	else:
-		move_time = min_move_time
+
 	if on_board():
 		_on_board = true
 	if not stuck and not is_block():
